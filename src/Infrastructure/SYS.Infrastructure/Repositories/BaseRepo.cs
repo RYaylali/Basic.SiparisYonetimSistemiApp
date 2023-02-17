@@ -1,0 +1,169 @@
+﻿using Microsoft.EntityFrameworkCore;
+using SYS.Domain.Entities.Common;
+using SYS.Domain.Enums;
+using SYS.Domain.Repositories;
+using SYS.Infrastructure.Context;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+using System.Transactions;
+
+namespace SYS.Infrastructure.Repositories
+{
+    public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
+    {
+        private readonly SiparisYonetimSistemiDb _context;
+        public BaseRepo(SiparisYonetimSistemiDb context)
+        {
+            _context = context;
+        }
+
+
+        public bool Add(T item)
+        {
+            try
+            {
+                item.CreatedDate = DateTime.Now;
+                _context.Set<T>().Add(item);
+                return Save() > 0;//sadece 1 satır döndürüyorsa true döndürür.(etkilenen ya da değişen satır sayısı)
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool Add(List<T> items)
+        {
+            try
+            {
+                //Ram üzerinde kullanılmayan dosyanın belli süre geçtikten sonra Ram'den temizleyen blok-->Garbag blok
+                //using için amacı garbag blok'u beklememek
+                using (TransactionScope ts = new TransactionScope())
+                {
+                    //Veri tabanında rol beklediğimiz olay herhangi bir işlem adımında sorun yaşarsan en başa dön gibi işlem yapar. işlem hatasına kadar yapılan adımlar kaydedilir. bunun en başa dönmesini sağlar. buna da rollback denir.-->TransactionScope
+                    // _context.Set<T>().AddRange(items);
+
+                    foreach (T item in items)
+                    {
+                        item.CreatedDate = DateTime.Now;
+                        _context.Set<T>().Add(item);
+                    }
+                    ts.Complete();
+                    return Save() > 0;//1 veya daha fazla satır eklneiyorsa true döndürür....
+                }
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public bool Any(Expression<Func<T, bool>> exp) => _context.Set<T>().Any();//Herhangi bir şey var mı yok mu ona bakacak
+        public List<T> GetAll() => _context.Set<T>().ToList();
+        public IQueryable<T> GetAll(params Expression<Func<T, object>>[] includes)
+        {
+            var query = _context.Set<T>().AsQueryable();
+
+            if (includes != null)
+            {
+                query = includes.Aggregate(query, (current, include) => current.Include(include));//current o anki query den dönen tablom, include ise onunla ilişkili olacak olan tablom
+            }
+            return query;
+        }
+        public T GetByDefault(Expression<Func<T, bool>> exp) => _context.Set<T>().FirstOrDefault(exp);
+        public T GetById(Guid id) => _context.Set<T>().Find(id);
+        public IQueryable<T> GetByID(Guid id, params Expression<Func<T, object>>[] includes)
+        {
+            var query = _context.Set<T>().Where(x => x.ID == id);
+
+            if (includes != null)
+            {
+                query = includes.Aggregate(query, (current, include) => current.Include(include));//current o anki query den dönen tablom, include ise onunla ilişkili olacak olan tablom
+            }
+            return query;
+        }
+
+        public List<T> GetDefault(Expression<Func<T, bool>> exp) => _context.Set<T>().Where(exp).ToList();
+
+
+        public bool Remove(T item)
+        {
+            item.Status = Status.Passive;
+            return Update(item);
+        }
+
+        public bool Remove(Guid id)
+        {
+            try
+            {
+                using (TransactionScope ts = new TransactionScope())
+                {
+                    T item = GetById(id);
+                    item.Status = Status.Passive;
+                    ts.Complete();
+                    return Update(item);
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public bool RemoveAll(Expression<Func<T, bool>> exp)
+        {
+            try
+            {
+                using (TransactionScope ts = new TransactionScope())
+                {
+                    var collection = GetDefault(exp);//Verilen ifadeye göre ilgili nesneleri collection'a atıyoruz
+                    var counter = 0;
+                    foreach (var item in collection)
+                    {
+                        item.Status = Status.Passive;
+                        bool operationResult = Update(item);
+                        if (operationResult) counter++;//sıradaki item'in silinme ,şlemi(yani silindi işaretleme) başarılı ise sayacı 1 arttırıyoruz.
+                    }
+                    if (collection.Count == counter) ts.Complete();//Koleksiyondaki eleman sayısı ile silme işleminde gerçekleşen eleman sayısıcounter'daki sayı) eşit ise bu işlemlerin tümü başarılırıdr.
+                    else return false;
+
+
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+
+        public int Save()
+        {
+            return _context.SaveChanges();//db'e kaydedilenlerin sayısını döner.(SQL de kategori tablosuna kategoriler ekledik kaç tane ekledik savechanges onu döner.)
+        }
+
+        public bool Update(T item)
+        {
+            try
+            {
+                item.UpdatedDate = DateTime.Now;
+                _context.Set<T>().Update(item);
+                return Save() > 0;
+            }
+            catch (Exception)
+            {
+
+                return false; ;
+            }
+        }
+
+    }
+}
