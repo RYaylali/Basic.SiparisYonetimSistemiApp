@@ -92,7 +92,7 @@ namespace SYS.Infrastructure.Repositories
 
         public bool Remove(T item)
         {
-            item.Status = Status.Passive;
+            item.Status= Status.Passive;
             return Update(item);
         }
 

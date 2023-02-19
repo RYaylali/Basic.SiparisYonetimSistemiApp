@@ -12,8 +12,8 @@ using SYS.Infrastructure.Context;
 namespace SYS.Infrastructure.Migrations
 {
     [DbContext(typeof(SiparisYonetimSistemiDb))]
-    [Migration("20230217200348_mig_2")]
-    partial class mig_2
+    [Migration("20230218182902_mig_1")]
+    partial class mig_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,7 +30,7 @@ namespace SYS.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ApprovalStatus")
+                    b.Property<int?>("ApprovalStatus")
                         .HasColumnType("int");
 
                     b.Property<string>("CompanyName")
@@ -43,11 +43,11 @@ namespace SYS.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");

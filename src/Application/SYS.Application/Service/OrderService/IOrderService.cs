@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SYS.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace SYS.Application.Service.OrderService
 {
     public interface IOrderService
     {
+        Task<string> CreateCompany(Order model);
     }
 }

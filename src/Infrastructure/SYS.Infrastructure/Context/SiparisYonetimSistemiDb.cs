@@ -19,6 +19,7 @@ namespace SYS.Infrastructure.Context
             base.OnConfiguring(optionsBuilder);
             optionsBuilder.UseSqlServer("server=DESKTOP-491CL38\\YAYLALISERVER22;database=SiparisYonetimDB;Trusted_Connection=True;");
         }
+       
         public DbSet<Company> Companies { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }

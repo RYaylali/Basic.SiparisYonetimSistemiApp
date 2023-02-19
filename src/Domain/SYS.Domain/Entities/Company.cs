@@ -11,9 +11,9 @@ namespace SYS.Domain.Entities
     public class Company : BaseEntity
     {
         public string CompanyName { get; set; }
-        public ApprovalStatus ApprovalStatus { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public ApprovalStatus? ApprovalStatus { get; set; }
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
         //Navigation Properties
         //Bİr Şirket birden fazla sipariş verebilir
         //Bir şirket birden fazla ürün alabilir 
