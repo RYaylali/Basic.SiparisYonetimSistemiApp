@@ -11,5 +11,6 @@ namespace SYS.Application.Models.DTOs
         public string ProductName { get; set; }
         public short? Quantity { get; set; }//Ürün stokta olmayabilir
         public decimal Price { get; set; }
+        public Guid? CompanyID { get; set; }
     }
 }

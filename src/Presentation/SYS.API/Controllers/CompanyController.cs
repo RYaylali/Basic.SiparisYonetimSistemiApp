@@ -2,6 +2,7 @@
 using HR.Application.Models.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SYS.Application.Models.DTOs;
 using SYS.Application.Service.CompanyService;
 using SYS.Domain.Entities;
 
@@ -31,7 +32,7 @@ namespace SYS.API.Controllers
             return Ok(companyDto);
         }
         [HttpPut]//güncelleme işlemlerinde kullanılır
-        public ActionResult UpdateCompany(Guid id,Company company) 
+        public ActionResult UpdateCompany(Guid id,UpdateCompanyDTO company) 
         {
             if (id != company.ID)
             {

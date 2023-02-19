@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using HR.Application.Models.DTOs;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using SYS.Application.Models.DTOs;
+using SYS.Application.Models.VMs;
 using SYS.Domain.Entities;
 using SYS.Domain.Repositories;
 using System;
@@ -30,16 +32,17 @@ namespace SYS.Application.Service.CompanyService
             return "Company Succesfully Created";
         }
 
-        public  string UpdateCompany(Company model)
+        public  string UpdateCompany(UpdateCompanyDTO model)
         {
             try
             {
-               Company company= _companyRepo.GetById(model.ID);
-
+               var company= _companyRepo.GetById(model.ID);
                 if (company!=null)
                 {
+                    company.ApprovalStatus=model.ApprovalStatus;
+                    company.EndTime=model.EndTime;
+                    company.StartTime=model.StartTime;
                      _companyRepo.Update(company);
-                  
                 }
             }
             catch (Exception)
@@ -49,9 +52,11 @@ namespace SYS.Application.Service.CompanyService
             }
             return "Successfully updated";
         }
-        public List<Company> GetAllCampany()
+        public   List<ListOfCompanyVM> GetAllCampany()
         {
-            return _companyRepo.GetAll();
+            var list = _companyRepo.GetAll();
+            var companyList =  _mapper.Map<List<ListOfCompanyVM>>(list);
+            return companyList;
         }
     }
 }

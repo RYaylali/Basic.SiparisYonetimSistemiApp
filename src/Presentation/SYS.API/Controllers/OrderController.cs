@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SYS.Application.Models.DTOs;
 using SYS.Application.Service.OrderService;
 using SYS.Domain.Entities;
 
@@ -16,10 +17,10 @@ namespace SYS.API.Controllers
             _orderService = orderService;
         }
         [HttpPost]
-        public ActionResult CreateOrder(Order order)
+        public async Task<ActionResult> CreateOrder(AddOrderDTO order)
         {
-            _orderService.CreateCompany(order);
-            return Ok();
+            string message = await _orderService.CreateCompany(order);
+            return Ok(message);
         }
     }
 }

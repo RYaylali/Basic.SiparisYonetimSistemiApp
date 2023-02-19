@@ -1,4 +1,5 @@
-﻿using SYS.Domain.Entities;
+﻿using SYS.Application.Models.DTOs;
+using SYS.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace SYS.Application.Service.ProductService
 {
     public interface IProductService
     {
-        Task<string> CreateCompany(Product model);
+        Task<string> CreateCompany(AddProductDTO model);
     }
 }

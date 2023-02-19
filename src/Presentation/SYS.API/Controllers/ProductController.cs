@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SYS.Application.Models.DTOs;
 using SYS.Application.Service.CompanyService;
 using SYS.Application.Service.ProductService;
 using SYS.Domain.Entities;
@@ -17,9 +18,9 @@ namespace SYS.API.Controllers
             _productService = productService;
         }
         [HttpPost]
-        public ActionResult CreateProduct(Product product)
+        public ActionResult CreateProduct(AddProductDTO product)
         {
-            _productService.CreateCompany(product);
+             _productService.CreateCompany(product);
             return Ok(product);
         }
     }

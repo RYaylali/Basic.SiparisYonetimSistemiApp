@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SYS.Application.Models.DTOs;
 using SYS.Domain.Entities;
 using SYS.Domain.Repositories;
 using System;
@@ -19,7 +20,7 @@ namespace SYS.Application.Service.ProductService
             _mapper = mapper;
             _productRepo = productRepo;
         }
-        public async Task<string> CreateCompany(Product model)
+        public async Task<string> CreateCompany(AddProductDTO model)
         {
             var product = _mapper.Map<Product>(model);//modeldeki propertyleri companydeki propertylere eşitler.
             _productRepo.Add(product);

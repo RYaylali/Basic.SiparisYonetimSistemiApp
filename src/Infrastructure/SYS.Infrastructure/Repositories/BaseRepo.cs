@@ -63,17 +63,8 @@ namespace SYS.Infrastructure.Repositories
             }
         }
         public bool Any(Expression<Func<T, bool>> exp) => _context.Set<T>().Any();//Herhangi bir şey var mı yok mu ona bakacak
-        public List<T> GetAll() => _context.Set<T>().ToList();
-        public IQueryable<T> GetAll(params Expression<Func<T, object>>[] includes)
-        {
-            var query = _context.Set<T>().AsQueryable();
-
-            if (includes != null)
-            {
-                query = includes.Aggregate(query, (current, include) => current.Include(include));//current o anki query den dönen tablom, include ise onunla ilişkili olacak olan tablom
-            }
-            return query;
-        }
+        public   List<T> GetAll() => _context.Set<T>().ToList();
+       
         public T GetByDefault(Expression<Func<T, bool>> exp) => _context.Set<T>().FirstOrDefault(exp);
         public T GetById(Guid id) => _context.Set<T>().Find(id);
         public IQueryable<T> GetByID(Guid id, params Expression<Func<T, object>>[] includes)
@@ -150,19 +141,10 @@ namespace SYS.Infrastructure.Repositories
             return _context.SaveChanges();//db'e kaydedilenlerin sayısını döner.(SQL de kategori tablosuna kategoriler ekledik kaç tane ekledik savechanges onu döner.)
         }
 
-        public bool Update(T item)
+        public  bool Update(T entity)
         {
-            try
-            {
-                item.UpdatedDate = DateTime.Now;
-                _context.Set<T>().Update(item);
-                return Save() > 0;
-            }
-            catch (Exception)
-            {
-
-                return false; ;
-            }
+            _context.Entry<T>(entity).State = EntityState.Modified;
+            return _context.SaveChanges()>0;
         }
 
     }

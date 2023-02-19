@@ -14,8 +14,8 @@ namespace SYS.Domain.Entities
         public decimal Price { get; set; }
         //Navigation Properties
         //bir ürünü bir şirket alabilir
-        public Guid? CompanyID { get; set; }
-        public virtual Company? Company { get; set; }
+        public Guid CompanyID { get; set; }
+        public virtual Company Company { get; set; }
         //bir ürün birden fazla siparişte olabilir
         public virtual List<Order> Orders { get; set; }
 

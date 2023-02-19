@@ -1,4 +1,6 @@
 ﻿using HR.Application.Models.DTOs;
+using SYS.Application.Models.DTOs;
+using SYS.Application.Models.VMs;
 using SYS.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,7 +13,7 @@ namespace SYS.Application.Service.CompanyService
     public interface ICompanyService
     {
         Task<string> CreateCompany(AddCompanyDTO model);
-        string UpdateCompany(Company model);
-        List<Company> GetAllCampany();
+        string UpdateCompany(UpdateCompanyDTO model);
+        List<ListOfCompanyVM> GetAllCampany();
     }
 }

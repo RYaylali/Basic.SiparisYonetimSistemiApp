@@ -22,7 +22,6 @@ namespace SYS.Domain.Repositories
         T GetByDefault(Expression<Func<T, bool>> exp);
         List<T> GetDefault(Expression<Func<T, bool>> exp);//Listelerini döndürecek
         List<T> GetAll();
-        IQueryable<T> GetAll(params Expression<Func<T, object>>[] includes);
         bool Any(Expression<Func<T, bool>> exp);
         int Save();
     }
