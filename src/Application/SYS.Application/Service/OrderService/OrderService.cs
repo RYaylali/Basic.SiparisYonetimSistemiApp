@@ -25,7 +25,7 @@ namespace SYS.Application.Service.OrderService
             _productRepo = productRepo;
             _companyRepo = companyRepo;
         }
-        public async Task<string> CreateCompany(AddOrderDTO model)
+        public async Task<string> CreateOrder(AddOrderDTO model)
         {
             var order = _mapper.Map<Order>(model);//modeldeki propertyleri orderdeki propertylere eşitler.
             Product product = _productRepo.GetById(model.ProductID);

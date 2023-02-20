@@ -41,11 +41,11 @@ namespace SYS.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("time");
+                    b.Property<long>("EndTime")
+                        .HasColumnType("bigint");
 
-                    b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("time");
+                    b.Property<long>("StartTime")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -104,7 +104,7 @@ namespace SYS.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CompanyID")
+                    b.Property<Guid?>("CompanyID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -155,9 +155,7 @@ namespace SYS.Infrastructure.Migrations
                 {
                     b.HasOne("SYS.Domain.Entities.Company", "Company")
                         .WithMany("Products")
-                        .HasForeignKey("CompanyID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CompanyID");
 
                     b.Navigation("Company");
                 });

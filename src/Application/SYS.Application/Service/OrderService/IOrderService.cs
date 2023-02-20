@@ -10,6 +10,6 @@ namespace SYS.Application.Service.OrderService
 {
     public interface IOrderService
     {
-        Task<string> CreateCompany(AddOrderDTO model);
+        Task<string> CreateOrder(AddOrderDTO model);
     }
 }

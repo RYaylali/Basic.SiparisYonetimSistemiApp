@@ -20,7 +20,11 @@ namespace SYS.API.Controllers
         [HttpPost]
         public ActionResult CreateProduct(AddProductDTO product)
         {
-             _productService.CreateCompany(product);
+            var success = _productService.CreateCompany(product);
+            if (success == null)
+            {
+                return BadRequest("Invalid data");//Geçersiz veri
+            }
             return Ok(product);
         }
     }

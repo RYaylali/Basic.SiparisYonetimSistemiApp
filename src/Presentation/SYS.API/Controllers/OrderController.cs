@@ -19,7 +19,11 @@ namespace SYS.API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateOrder(AddOrderDTO order)
         {
-            string message = await _orderService.CreateCompany(order);
+            string message = await _orderService.CreateOrder(order);
+            if (message == null)
+            {
+                return BadRequest("Geçersiz veri.");
+            }
             return Ok(message);
         }
     }

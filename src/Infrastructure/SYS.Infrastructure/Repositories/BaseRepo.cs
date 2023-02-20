@@ -65,7 +65,7 @@ namespace SYS.Infrastructure.Repositories
         public bool Any(Expression<Func<T, bool>> exp) => _context.Set<T>().Any();//Herhangi bir şey var mı yok mu ona bakacak
         public   List<T> GetAll() => _context.Set<T>().ToList();
        
-        public T GetByDefault(Expression<Func<T, bool>> exp) => _context.Set<T>().FirstOrDefault(exp);
+      
         public T GetById(Guid id) => _context.Set<T>().Find(id);
         public IQueryable<T> GetByID(Guid id, params Expression<Func<T, object>>[] includes)
         {
@@ -106,36 +106,7 @@ namespace SYS.Infrastructure.Repositories
             }
         }
 
-        public bool RemoveAll(Expression<Func<T, bool>> exp)
-        {
-            try
-            {
-                using (TransactionScope ts = new TransactionScope())
-                {
-                    var collection = GetDefault(exp);//Verilen ifadeye göre ilgili nesneleri collection'a atıyoruz
-                    var counter = 0;
-                    foreach (var item in collection)
-                    {
-                        item.Status = Status.Passive;
-                        bool operationResult = Update(item);
-                        if (operationResult) counter++;//sıradaki item'in silinme ,şlemi(yani silindi işaretleme) başarılı ise sayacı 1 arttırıyoruz.
-                    }
-                    if (collection.Count == counter) ts.Complete();//Koleksiyondaki eleman sayısı ile silme işleminde gerçekleşen eleman sayısıcounter'daki sayı) eşit ise bu işlemlerin tümü başarılırıdr.
-                    else return false;
-
-
-                }
-                return true;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-
-
+       
         public int Save()
         {
             return _context.SaveChanges();//db'e kaydedilenlerin sayısını döner.(SQL de kategori tablosuna kategoriler ekledik kaç tane ekledik savechanges onu döner.)

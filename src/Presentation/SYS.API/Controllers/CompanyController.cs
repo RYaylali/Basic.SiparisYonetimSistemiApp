@@ -23,12 +23,21 @@ namespace SYS.API.Controllers
         [HttpGet]
         public ActionResult GetAllCompany()
         {
-            return Ok(_companyService.GetAllCampany());
+            var result = _companyService.GetAllCampany();
+            if (result == null)
+            {
+                return StatusCode(500, "Server error");//Sunucu Hatası
+            }
+            return Ok(result);
         }
-        [HttpPost]//Ekleme işleminde post kullanılır
+        [HttpPost]
         public ActionResult CreateCompany(AddCompanyDTO companyDto)
         {
-            _companyService.CreateCompany(companyDto);
+            var success = _companyService.CreateCompany(companyDto);
+            if (success==null)
+            {
+                return BadRequest("Invalid data");//geçersiz veri
+            }
             return Ok(companyDto);
         }
         [HttpPut]//güncelleme işlemlerinde kullanılır
